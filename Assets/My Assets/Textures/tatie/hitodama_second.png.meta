@@ -147,7 +147,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      hitodama_second_0: 918335506877971487
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

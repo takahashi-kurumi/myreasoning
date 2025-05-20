@@ -10,13 +10,17 @@ public class StoryManager : MonoBehaviour
     [SerializeField] private Image characterImageLeft;
     [SerializeField] private TextMeshProUGUI mainText;
     [SerializeField] private TextMeshProUGUI characterName;
+    [SerializeField] private AudioSource se;
 
     private int currentIndex = 0;
+
+    public int storyIndex { get; private set; }
 
     void Start()
     {
         ShowStory(currentIndex);
     }
+
 
     public void NextStory()
     {
@@ -35,5 +39,22 @@ public class StoryManager : MonoBehaviour
         characterImageLeft.sprite = story.characterImageLeft;
         mainText.text = story.mainText;
         characterName.text = story.characterName;
+        
+
+        if (story.se != null)
+        {
+            se.PlayOneShot(story.se);
+        }
+    }
+
+    private void Update()
+    {
+        if (Input.GetMouseButtonDown(0))
+        {
+            currentIndex++;
+            mainText.text = "";
+            characterName.text = "";
+            ShowStory(currentIndex);
+        }
     }
 }

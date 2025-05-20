@@ -13,6 +13,7 @@ public class StoryData : ScriptableObject
         public Sprite backGround;
         public Sprite characterImageRight;
         public Sprite characterImageLeft;
+        public AudioClip se;
     }
 
     public List<Story> stories;
