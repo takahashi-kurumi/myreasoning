@@ -28,7 +28,7 @@ public class StoryManager : MonoBehaviour
 
 
 
-    public void NextStory()
+    public void NextStory(int currentIndex)
     {
         if (currentIndex < storyData.stories.Count - 1)
         {
@@ -44,6 +44,7 @@ public class StoryManager : MonoBehaviour
 
     private void ShowStory(int index)
     {
+        Debug.Log(index);
         var story = storyData.stories[index];
         backGround.sprite = story.backGround;
         characterImageRight.sprite = story.characterImageRight;
@@ -65,7 +66,8 @@ public class StoryManager : MonoBehaviour
             currentIndex++;
             mainText.text = "";
             characterName.text = "";
-            ShowStory(currentIndex);
+            NextStory(currentIndex);
+            //ShowStory(currentIndex);
         }
     }
 
@@ -84,7 +86,7 @@ public class StoryManager : MonoBehaviour
         }
     }
 
-    private void OnChoiceSelected(Choice choice)
+    private void OnChoiceSelected(StoryData.Choice choice)
     {
         currentIndex = choice.nextStoryIndex;
         ShowStory(currentIndex);

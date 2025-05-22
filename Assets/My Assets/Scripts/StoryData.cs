@@ -19,6 +19,12 @@ public class StoryData : ScriptableObject
     public List<Choice> choices;
     public List<Story> stories;
 
+    public class Choice : MonoBehaviour
+    {
+
+        public string text;
+        public int nextStoryIndex;
+    }
 }
 
 

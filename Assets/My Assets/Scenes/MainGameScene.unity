@@ -1234,7 +1234,7 @@ MonoBehaviour:
   characterName: {fileID: 610821324}
   se: {fileID: 1851211543}
   SelectButton: {fileID: 5358796708484879826, guid: 3b7c5809d054a894aa2a3a8d06aaf706, type: 3}
-  SelectButtons: {fileID: 1710875949}
+  SelectButtons: {fileID: 1945822725}
 --- !u!4 &1820409007
 Transform:
   m_ObjectHideFlags: 0
