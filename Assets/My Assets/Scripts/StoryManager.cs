@@ -1,6 +1,8 @@
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using System;
+using System.Collections.Generic;
 
 public class StoryManager : MonoBehaviour
 {
@@ -11,6 +13,8 @@ public class StoryManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI mainText;
     [SerializeField] private TextMeshProUGUI characterName;
     [SerializeField] private AudioSource se;
+    [SerializeField] private GameObject SelectButton;
+    [SerializeField] private Transform SelectButtons;
 
     private int currentIndex = 0;
 
@@ -22,12 +26,19 @@ public class StoryManager : MonoBehaviour
     }
 
 
+
+
     public void NextStory()
     {
         if (currentIndex < storyData.stories.Count - 1)
         {
             currentIndex++;
             ShowStory(currentIndex);
+        }
+
+        else
+        {
+            ShowChoices();
         }
     }
 
@@ -57,4 +68,27 @@ public class StoryManager : MonoBehaviour
             ShowStory(currentIndex);
         }
     }
+
+    private void ShowChoices()
+    {
+        foreach (Transform child in SelectButtons)
+        {
+            Destroy(child.gameObject);
+        }
+
+        foreach (var choice in storyData.choices)
+        {
+            var button = Instantiate(SelectButton, SelectButtons);
+            button.GetComponentInChildren<TextMeshProUGUI>().text = choice.text;
+            button.GetComponent<Button>().onClick.AddListener(() => OnChoiceSelected(choice));
+        }
+    }
+
+    private void OnChoiceSelected(Choice choice)
+    {
+        currentIndex = choice.nextStoryIndex;
+        ShowStory(currentIndex);
+    }
+
+
 }

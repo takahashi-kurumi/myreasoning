@@ -14,7 +14,11 @@ public class StoryData : ScriptableObject
         public Sprite characterImageRight;
         public Sprite characterImageLeft;
         public AudioClip se;
+        public List<int> nextStoryIndices;
     }
-
+    public List<Choice> choices;
     public List<Story> stories;
+
 }
+
+
