@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "New StoryData", menuName = "Story/StoryData")]
@@ -15,16 +16,20 @@ public class StoryData : ScriptableObject
         public Sprite characterImageLeft;
         public AudioClip se;
         public List<int> nextStoryIndices;
+        
     }
+    
     public List<Choice> choices;
     public List<Story> stories;
 
-    public class Choice : MonoBehaviour
+    [System.Serializable]
+    public class Choice
     {
-
-        public string text;
-        public int nextStoryIndex;
+        public TextMeshProUGUI buttonText; // ボタンのTextMeshProUGUIコンポーネント
+        public string text; // 表示するテキスト
+        public int nextStoryIndex; // 次に進むストーリーのインデックス
     }
+
 }
 
 
