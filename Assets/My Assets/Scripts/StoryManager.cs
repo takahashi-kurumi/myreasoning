@@ -1,8 +1,12 @@
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using DG.Tweening;
+using Unity.VisualScripting.Antlr3.Runtime;
+using Unity.VisualScripting;
+using Cysharp.Threading.Tasks;
+using System.Threading;
 using System;
-using System.Collections.Generic;
 using static StoryData;
 
 public class StoryManager : MonoBehaviour
@@ -16,8 +20,11 @@ public class StoryManager : MonoBehaviour
     [SerializeField] private AudioSource se;
     [SerializeField] private GameObject SelectButton;
     [SerializeField] private Transform SelectButtons;
-
+    
+    private bool isLettering = false; 
     private int currentIndex = 0;
+
+    CancellationTokenSource cts;
 
     public int storyIndex { get; private set; }
 
@@ -33,34 +40,66 @@ public class StoryManager : MonoBehaviour
     public void NextStory()
     {
 
-        if (currentIndex < storyData.stories.Count - 1)
+        if (storyData.stories[currentIndex].nextStoryIndices != null && storyData.stories[currentIndex].nextStoryIndices.Count > 0)
         {
-            
+            ShowStory(currentIndex);
+            ShowChoices();
+        }
+
+
+        else if (currentIndex <= storyData.stories.Count - 1)
+        {
+
             ShowStory(currentIndex);
         }
 
-        else if (currentIndex == storyData.stories.Count - 1)
-        {
-            ShowChoices();
-        }
     }
 
-    private void ShowStory(int index)
+    private async void ShowStory(int index)
     {
         Debug.Log(index);
         var story = storyData.stories[index];
         backGround.sprite = story.backGround;
         characterImageRight.sprite = story.characterImageRight;
         characterImageLeft.sprite = story.characterImageLeft;
-        mainText.text = story.mainText;
         characterName.text = story.characterName;
-        
 
-
-        if (story.se != null)
+        if (isLettering)
         {
-            se.PlayOneShot(story.se);
+            if (cts != null)
+            {
+                cts.Cancel();
+            }
         }
+        else
+        {
+            cts = new CancellationTokenSource();
+            await TypeText(story.mainText, cts.Token);
+        }
+
+    }
+
+    private async UniTask TypeText(string text, CancellationToken ct)
+    {
+        isLettering = true;
+        try
+        {
+            await UniTask.Yield();
+            mainText.text = "";
+
+            foreach (char letter in text)
+            {
+                mainText.text += letter;
+                await UniTask.Delay(200, false, PlayerLoopTiming.Update, ct);
+            }
+        }
+        catch (OperationCanceledException e)
+        {
+            mainText.text = text;
+        }
+
+        isLettering = false;
+
     }
 
     private void Update()
@@ -68,16 +107,18 @@ public class StoryManager : MonoBehaviour
         if (Input.GetMouseButtonDown(0))
         {
             currentIndex++;
-            mainText.text = "";
+            //mainText.text = "";
             characterName.text = "";
             NextStory();
             //ShowStory(currentIndex);
         }
     }
 
+
+
     private void ShowChoices()
     {
-        // 既存の選択肢ボタンを削除
+        //既存の選択肢ボタンを削除
         foreach (Transform child in SelectButtons)
         {
             Destroy(child.gameObject);
@@ -97,13 +138,11 @@ public class StoryManager : MonoBehaviour
 
     private void OnChoiceSelected(StoryData.Choice choice)
     {
+        foreach (Transform child in SelectButtons)
+        {
+            Destroy(child.gameObject);
+        }
         currentIndex = choice.nextStoryIndex;
-        ShowStory(currentIndex);
-    }
-
-    private void OnChoiceSelected(int nextIndex)
-    {
-        currentIndex = nextIndex;
         ShowStory(currentIndex);
     }
 

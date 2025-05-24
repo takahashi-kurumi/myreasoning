@@ -18,7 +18,7 @@ public class StoryData : ScriptableObject
         public List<int> nextStoryIndices;
         
     }
-    
+
     public List<Choice> choices;
     public List<Story> stories;
 
