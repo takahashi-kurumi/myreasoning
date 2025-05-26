@@ -44,6 +44,7 @@ public class StoryManager : MonoBehaviour
         {
             ShowStory(currentIndex);
             ShowChoices();
+            
         }
 
 
@@ -51,8 +52,8 @@ public class StoryManager : MonoBehaviour
         {
 
             ShowStory(currentIndex);
+            
         }
-
     }
 
     private async void ShowStory(int index)
@@ -63,18 +64,21 @@ public class StoryManager : MonoBehaviour
         characterImageRight.sprite = story.characterImageRight;
         characterImageLeft.sprite = story.characterImageLeft;
         characterName.text = story.characterName;
+        
 
         if (isLettering)
         {
             if (cts != null)
             {
                 cts.Cancel();
+                
             }
         }
         else
         {
             cts = new CancellationTokenSource();
             await TypeText(story.mainText, cts.Token);
+            
         }
 
     }
@@ -100,18 +104,20 @@ public class StoryManager : MonoBehaviour
 
         isLettering = false;
 
+        currentIndex++;
     }
 
     private void Update()
     {
         if (Input.GetMouseButtonDown(0))
         {
-            currentIndex++;
             //mainText.text = "";
             characterName.text = "";
             NextStory();
-            //ShowStory(currentIndex);
+            
+
         }
+        
     }
 
 
