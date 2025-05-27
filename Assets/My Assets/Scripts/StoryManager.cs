@@ -20,7 +20,10 @@ public class StoryManager : MonoBehaviour
     [SerializeField] private AudioSource se;
     [SerializeField] private GameObject SelectButton;
     [SerializeField] private Transform SelectButtons;
-    
+    [SerializeField] private GameObject particleEffect;
+
+
+
     private bool isLettering = false; 
     private int currentIndex = 0;
 
@@ -40,11 +43,12 @@ public class StoryManager : MonoBehaviour
     public void NextStory()
     {
 
+
         if (storyData.stories[currentIndex].nextStoryIndices != null && storyData.stories[currentIndex].nextStoryIndices.Count > 0)
         {
             ShowStory(currentIndex);
             ShowChoices();
-            
+
         }
 
 
@@ -52,8 +56,9 @@ public class StoryManager : MonoBehaviour
         {
 
             ShowStory(currentIndex);
-            
+
         }
+
     }
 
     private async void ShowStory(int index)
@@ -64,27 +69,40 @@ public class StoryManager : MonoBehaviour
         characterImageRight.sprite = story.characterImageRight;
         characterImageLeft.sprite = story.characterImageLeft;
         characterName.text = story.characterName;
-        
+
+        if (story.particleEffect != null)
+        {
+            if (particleEffect != null)
+            {
+                Destroy(particleEffect);
+            }
+            particleEffect = Instantiate(story.particleEffect, transform.position, Quaternion.identity);
+            particleEffect.SetActive(true);
+        }
 
         if (isLettering)
         {
             if (cts != null)
             {
                 cts.Cancel();
-                
             }
         }
         else
         {
             cts = new CancellationTokenSource();
             await TypeText(story.mainText, cts.Token);
-            
+            currentIndex++;
+
         }
+
+        
 
     }
 
     private async UniTask TypeText(string text, CancellationToken ct)
     {
+        
+
         isLettering = true;
         try
         {
@@ -94,7 +112,7 @@ public class StoryManager : MonoBehaviour
             foreach (char letter in text)
             {
                 mainText.text += letter;
-                await UniTask.Delay(200, false, PlayerLoopTiming.Update, ct);
+                await UniTask.Delay(50, false, PlayerLoopTiming.Update, ct);
             }
         }
         catch (OperationCanceledException e)
@@ -104,7 +122,7 @@ public class StoryManager : MonoBehaviour
 
         isLettering = false;
 
-        currentIndex++;
+        
     }
 
     private void Update()
@@ -114,10 +132,8 @@ public class StoryManager : MonoBehaviour
             //mainText.text = "";
             characterName.text = "";
             NextStory();
-            
-
         }
-        
+
     }
 
 
@@ -140,6 +156,9 @@ public class StoryManager : MonoBehaviour
             choice.buttonText = buttonText; // Choice‚ÉTextMeshProUGUI‚ðŠi”[
             button.GetComponent<Button>().onClick.AddListener(() => OnChoiceSelected(choice));
         }
+        currentIndex--;
+
+
     }
 
     private void OnChoiceSelected(StoryData.Choice choice)
@@ -150,6 +169,7 @@ public class StoryManager : MonoBehaviour
         }
         currentIndex = choice.nextStoryIndex;
         ShowStory(currentIndex);
+        
     }
 
 

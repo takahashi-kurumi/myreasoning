@@ -16,7 +16,8 @@ public class StoryData : ScriptableObject
         public Sprite characterImageLeft;
         public AudioClip se;
         public List<int> nextStoryIndices;
-        
+        public GameObject particleEffect;
+
     }
 
     public List<Choice> choices;
