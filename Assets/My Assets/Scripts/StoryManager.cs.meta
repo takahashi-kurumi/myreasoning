@@ -1,2 +1,21 @@
 fileFormatVersion: 2
 guid: eb3769ce55190214c9c5aca7b5ef8a16
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - storyData: {instanceID: 0}
+  - backGround: {instanceID: 0}
+  - characterImageRight: {instanceID: 0}
+  - characterImageLeft: {instanceID: 0}
+  - mainText: {instanceID: 0}
+  - characterName: {instanceID: 0}
+  - se: {instanceID: 0}
+  - SelectButton: {instanceID: 0}
+  - SelectButtons: {instanceID: 0}
+  - particleEffect: {instanceID: 0}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

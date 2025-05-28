@@ -1033,14 +1033,14 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 36
-  m_fontSizeBase: 36
+  m_fontSize: 44
+  m_fontSizeBase: 44
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
-  m_fontStyle: 0
-  m_HorizontalAlignment: 2
+  m_fontStyle: 1
+  m_HorizontalAlignment: 1
   m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
@@ -1236,6 +1236,9 @@ MonoBehaviour:
   SelectButton: {fileID: 5358796708484879826, guid: 3b7c5809d054a894aa2a3a8d06aaf706, type: 3}
   SelectButtons: {fileID: 1945822725}
   particleEffect: {fileID: 7576963946373654690, guid: 780b1bbafa8f1f448a87a6ab6f4605b3, type: 3}
+  clickSe: {fileID: 8300000, guid: f552e18d89cbac442a1a007b9aa4e860, type: 3}
+  fadeDuration: 1
+  waitTime: 3
 --- !u!4 &1820409007
 Transform:
   m_ObjectHideFlags: 0
@@ -1244,8 +1247,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1820409005}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: -0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

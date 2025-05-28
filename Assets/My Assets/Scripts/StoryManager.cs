@@ -8,6 +8,8 @@ using Cysharp.Threading.Tasks;
 using System.Threading;
 using System;
 using static StoryData;
+using System.Collections;
+using System.Reflection;
 
 public class StoryManager : MonoBehaviour
 {
@@ -21,8 +23,10 @@ public class StoryManager : MonoBehaviour
     [SerializeField] private GameObject SelectButton;
     [SerializeField] private Transform SelectButtons;
     [SerializeField] private GameObject particleEffect;
+    [SerializeField] private AudioClip clickSe;
 
-
+    public float fadeDuration = 500.0f;
+    public float waitTime = 3f;
 
     private bool isLettering = false; 
     private int currentIndex = 0;
@@ -35,6 +39,25 @@ public class StoryManager : MonoBehaviour
     void Start()
     {
         ShowStory(currentIndex);
+    }
+
+
+    private void Update()
+    {
+        if (Input.GetMouseButtonDown(0))
+        {
+            se.PlayOneShot(clickSe);
+
+            Color color = characterImageLeft.color;
+            if (color.a == 0)
+            {
+                StartCoroutine(FadeInAfterDelay());
+            }
+            
+            characterName.text = "";
+            NextStory();
+        }
+
     }
 
 
@@ -78,6 +101,8 @@ public class StoryManager : MonoBehaviour
             }
             particleEffect = Instantiate(story.particleEffect, transform.position, Quaternion.identity);
             particleEffect.SetActive(true);
+            StartCoroutine(FadeOutAfterDelay());
+            
         }
 
         if (isLettering)
@@ -93,11 +118,27 @@ public class StoryManager : MonoBehaviour
             await TypeText(story.mainText, cts.Token);
             currentIndex++;
 
-        }
-
-        
+        }        
 
     }
+
+
+    private IEnumerator FadeOutAfterDelay()
+    {
+        // 指定した時間だけ待機
+        yield return new WaitForSeconds(waitTime);
+
+        // フェードアウト処理
+        yield return characterImageLeft.DOFade(0, fadeDuration).WaitForCompletion();
+    }
+
+
+    private IEnumerator FadeInAfterDelay()
+    { 
+        // フェードアウト処理
+        yield return characterImageLeft.DOFade(1, fadeDuration).WaitForCompletion();
+    }
+
 
     private async UniTask TypeText(string text, CancellationToken ct)
     {
@@ -125,16 +166,7 @@ public class StoryManager : MonoBehaviour
         
     }
 
-    private void Update()
-    {
-        if (Input.GetMouseButtonDown(0))
-        {
-            //mainText.text = "";
-            characterName.text = "";
-            NextStory();
-        }
-
-    }
+    
 
 
 
