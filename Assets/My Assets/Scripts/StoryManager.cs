@@ -10,6 +10,7 @@ using System;
 using static StoryData;
 using System.Collections;
 using System.Reflection;
+using UnityEngine.SceneManagement;
 
 public class StoryManager : MonoBehaviour
 {
@@ -25,10 +26,11 @@ public class StoryManager : MonoBehaviour
     [SerializeField] private GameObject particleEffect;
     [SerializeField] private AudioClip clickSe;
 
-    public float fadeDuration = 500.0f;
-    public float waitTime = 3f;
+    public float fadeDuration = 5.0f;
+    public float waitTime = 1f;
 
-    private bool isLettering = false; 
+    private bool isLettering = false;
+    private bool isEfecting = false;
     private int currentIndex = 0;
 
     CancellationTokenSource cts;
@@ -47,6 +49,12 @@ public class StoryManager : MonoBehaviour
         if (Input.GetMouseButtonDown(0))
         {
             se.PlayOneShot(clickSe);
+
+            if (isEfecting)
+            {
+                Destroy(particleEffect);
+                isEfecting = false;
+            }
 
             Color color = characterImageLeft.color;
             if (color.a == 0)
@@ -67,7 +75,7 @@ public class StoryManager : MonoBehaviour
     {
 
 
-        if (storyData.stories[currentIndex].nextStoryIndices != null && storyData.stories[currentIndex].nextStoryIndices.Count > 0)
+        if (currentIndex <= storyData.stories.Count - 1 && storyData.stories[currentIndex].nextStoryIndices != null && storyData.stories[currentIndex].nextStoryIndices.Count > 0)
         {
             ShowStory(currentIndex);
             ShowChoices();
@@ -80,6 +88,11 @@ public class StoryManager : MonoBehaviour
 
             ShowStory(currentIndex);
 
+        }
+
+        else
+        {
+            SceneManager.LoadScene("EndingScene");
         }
 
     }
@@ -101,7 +114,8 @@ public class StoryManager : MonoBehaviour
             }
             particleEffect = Instantiate(story.particleEffect, transform.position, Quaternion.identity);
             particleEffect.SetActive(true);
-            StartCoroutine(FadeOutAfterDelay());
+            StartCoroutine(FadeOutAfterDelay(characterImageLeft));
+            isEfecting = true;
             
         }
 
@@ -123,13 +137,13 @@ public class StoryManager : MonoBehaviour
     }
 
 
-    private IEnumerator FadeOutAfterDelay()
+    private IEnumerator FadeOutAfterDelay(Image image)
     {
         // 指定した時間だけ待機
         yield return new WaitForSeconds(waitTime);
 
         // フェードアウト処理
-        yield return characterImageLeft.DOFade(0, fadeDuration).WaitForCompletion();
+        yield return image.DOFade(0, fadeDuration).WaitForCompletion();
     }
 
 
